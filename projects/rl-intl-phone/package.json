@@ -1,6 +1,6 @@
 {
   "name": "rl-intl-phone",
-  "version": "0.0.1",
+  "version": "0.0.8",
   "description": "Angular library to provide the international phone number feature by country dropdown and input fields with lots of customization and features like input masking, change the country, require valiation and many more.",
   "author": {
     "name": "Rafiul Islam Shohan",
@@ -23,11 +23,11 @@
     "international number"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
-    "@angular/common": "^18.2.0",
-    "@angular/core": "^18.2.0"
+    "@angular/common": "^18.0.0",
+    "@angular/core": "^18.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

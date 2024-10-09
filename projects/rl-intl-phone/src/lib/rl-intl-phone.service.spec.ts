@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RlIntlPhoneService } from './rl-intl-phone.service';
+import { RLIntlPhoneService } from './rl-intl-phone.service';
 
 describe('RlIntlPhoneService', () => {
-  let service: RlIntlPhoneService;
+  let service: RLIntlPhoneService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RlIntlPhoneService);
+    service = TestBed.inject(RLIntlPhoneService);
   });
 
   it('should be created', () => {

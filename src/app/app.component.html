@@ -17,6 +17,7 @@
   <h1>Sample with Reactive Form Support</h1>
   <rl-intl-phone formControlName="sampleReactiveControl" [ConfigurationOption]="configOption3" ></rl-intl-phone>
 </div>
+{{controls['sampleReactiveControl'].value | json}}
 <button class="btn btn-primary" (click)="ToggbleEnableDisableState()" >Toggle Enable/Disable</button>
 <button (click)="GetFormValue()">Get Value Using FormGroup</button>
 </form>
