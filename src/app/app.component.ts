@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import {
@@ -34,11 +36,20 @@ export class AppComponent {
   configOption1: ConfigurationOptions;
   configOption2: ConfigurationOptions;
   configOption3: ConfigurationOptions;
+  configOption4: ConfigurationOptions;
   sampleForm: FormGroup;
   constructor(private formBuilder: FormBuilder) {
     this.sampleForm = this.formBuilder.group({
-      sampleReactiveControl: [null],
+      phone: [null],
+      phone1: [null],
+      formArray: this.formBuilder.array(
+        [].map(() => this.createParticipantInfoForm())
+      ),
     });
+
+    this.singleParticipants.push(
+      this.createParticipantInfoForm()
+    );
 
     this.selectedCountryList.push({
       isoCode: 'TE',
@@ -48,9 +59,16 @@ export class AppComponent {
       inputMasking: '999 999 9999',
     });
     this.selectedCountryList.push({ isoCode: 'IN', name: 'INDIATEST' });
+    this.selectedCountryList.push({ isoCode: 'CA', name: 'CANADA' });
     this.configOption1 = new ConfigurationOptions();
     this.configOption2 = new ConfigurationOptions();
+    
     this.configOption3 = new ConfigurationOptions();
+    this.configOption3.selectorClass = "Phone1"
+
+    this.configOption4 = new ConfigurationOptions();
+    this.configOption4.selectorClass = "Phone2"
+
     this.configOption2.selectorClass = 'CountryInput1';
     this.configOption2.optionTextTypes = [];
     this.configOption2.optionTextTypes.push(ContentOptionsEnum.Flag);
@@ -60,16 +78,38 @@ export class AppComponent {
     this.configOption1.isShowAllOtherCountry = false;
     this.configOption1.outputFormat = OutputOptionsEnum.Number;
     // this.selectedCountryList.push(new CustomCountryModel(){ Name="Test2", ISOCode="IN"});
-    setTimeout(() => {
-      this.GetFormValue();
-    }, 100);
+    // setTimeout(() => {
+    //   this.GetFormValue();
+    // }, 100);
+  }
+
+
+  createParticipantInfoForm(code?: string): FormGroup {
+    return this.formBuilder.group({
+      phone: [null, [Validators.required]],
+    });
+  }
+  get singleParticipants(): FormArray {
+    return this.sampleForm.get('formArray') as FormArray;
+  }
+
+  getPiFormControl(
+    index: number,
+    formArreyName: string,
+    controlName: string
+  ): FormControl {
+    const formArray: FormArray = this.sampleForm.get(
+      formArreyName
+    ) as FormArray;
+    const formGroup: FormGroup = formArray.at(index) as FormGroup;
+    return formGroup.get(controlName) as FormControl;
   }
 
   ToggbleEnableDisableState() {
-    if (this.sampleForm.controls['sampleReactiveControl'].disabled) {
-      this.sampleForm.controls['sampleReactiveControl'].enable();
+    if (this.sampleForm.controls['phone'].disabled) {
+      this.sampleForm.controls['phone'].enable();
     } else {
-      this.sampleForm.controls['sampleReactiveControl'].disable();
+      this.sampleForm.controls['phone'].disable();
     }
   }
 
@@ -86,7 +126,7 @@ export class AppComponent {
       number: '+1 (860) 260-5928',
       rawNumber: '8602605928',
     };
-    this.sampleForm.controls['sampleReactiveControl'].setValue(
+    this.sampleForm.controls['phone'].setValue(
       selectedCountryValue
     );
     console.log('form value is ', this.sampleForm);
@@ -96,6 +136,11 @@ export class AppComponent {
     console.log('Number Value is', e);
   }
 
+  onNumberChange1(e: any) {
+    console.log('Number Value is', e);
+  }
+
+  
   get controls() {
     return this.sampleForm.controls;
   }

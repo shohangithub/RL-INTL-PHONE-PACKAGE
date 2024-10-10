@@ -1,7 +1,14 @@
-<div [ngClass]="ConfigurationOption?.selectorClass" class="input-main-div">
+<div
+  [ngClass]="ConfigurationOption?.selectorClass + this.key"
+  class="input-main-div"
+>
   <div class="input-select-div">
-      <select class="CountryDrpDwn">
-      </select>
-  </div>  
-  <input type="text" name="InputPhone" class="CountryNumberInput form-control">
+    <select class="CountryDrpDwn"></select>
+  </div>
+  <input
+    type="text"
+    name="InputPhone"
+    class="CountryNumberInput form-control"
+    [placeholder]="placeholder"
+  />
 </div>

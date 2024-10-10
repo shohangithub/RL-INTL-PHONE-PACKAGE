@@ -1,23 +1,58 @@
 <div>
   <h1>Sample with all country</h1>
-  <rl-intl-phone [NumberTextValue]="'8602605927'" [SelectedCountryISOCode]="'US'" [ConfigurationOption]="configOption2" ></rl-intl-phone>
+  <rl-intl-phone
+    [NumberTextValue]="'8602605927'"
+    [SelectedCountryISOCode]="'US'"
+    [ConfigurationOption]="configOption2"
+  ></rl-intl-phone>
 </div>
-
-
 
 <div>
   <h1>Sample with selected country</h1>
-  <rl-intl-phone [CountryList]="selectedCountryList"  [ConfigurationOption]="configOption1" (OnNumberChange)="onNumberChange($event)"></rl-intl-phone>
+  <rl-intl-phone
+    [CountryList]="selectedCountryList"
+    placeholder="Hello"
+    [ConfigurationOption]="configOption1"
+    (OnNumberChange)="onNumberChange($event)"
+  ></rl-intl-phone>
 </div>
 
 <form [formGroup]="sampleForm">
+  <div>
+    <h1>Sample with Reactive Form Support</h1>
+    <rl-intl-phone
+      key="phone"
+      formControlName="phone"
+      [ConfigurationOption]="configOption3"
+      (OnNumberChange)="onNumberChange($event)"
+    ></rl-intl-phone>
+    {{ controls["phone"].value | json }}
+    <rl-intl-phone
+      key="phone1"
+      formControlName="phone1"
+      [ConfigurationOption]="configOption4"
+      (OnNumberChange)="onNumberChange1($event)"
+    ></rl-intl-phone>
+  </div>
+  {{ controls["phone1"].value | json }}
+  <button class="btn btn-primary" (click)="ToggbleEnableDisableState()">
+    Toggle Enable/Disable
+  </button>
+  <button (click)="GetFormValue()">Get Value Using FormGroup</button>
 
+  <ng-container *ngIf="singleParticipants.controls.length">
+    <!-- <div ngbAccordion [closeOthers]="true"> -->
+    @for (item of singleParticipants.controls;track item) {
 
-<div>
-  <h1>Sample with Reactive Form Support</h1>
-  <rl-intl-phone formControlName="sampleReactiveControl" [ConfigurationOption]="configOption3" ></rl-intl-phone>
-</div>
-{{controls['sampleReactiveControl'].value | json}}
-<button class="btn btn-primary" (click)="ToggbleEnableDisableState()" >Toggle Enable/Disable</button>
-<button (click)="GetFormValue()">Get Value Using FormGroup</button>
+    <div>
+      <h1>Sample with Reactive Form Array Support</h1>
+      <rl-intl-phone
+        formControlName="phone1"
+        [ConfigurationOption]="configOption3"
+        (OnNumberChange)="onNumberChange1($event)"
+      ></rl-intl-phone>
+    </div>
+
+    }
+  </ng-container>
 </form>

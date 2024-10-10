@@ -14,14 +14,14 @@ import {
   ICountryModel,
   CustomCountryModel,
   NumberResult,
-} from './model/country-model';
+} from './model/CountryModel';
 import { RLIntlPhoneService } from './rl-intl-phone.service';
 import {
   ContentOptionsEnum,
   OutputOptionsEnum,
   SortOrderEnum,
   TooltipOptionsEnum,
-} from './model/enums';
+} from './model/Enums';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 declare var $: any;
@@ -58,6 +58,12 @@ export class RlIntlPhoneComponent
    * Input property to set the prefilled number value.
    */
   @Input() NumberTextValue: string;
+  @Input() placeholder: string = '';
+
+  /**
+   * Input property to set the unique key for component unique selector.
+   */
+  @Input() key: string = 'phone_number';
 
   /**
    * Input property to set the selected country isocode not able to get correctly from number text value.
@@ -97,11 +103,11 @@ export class RlIntlPhoneComponent
         (x) => x.isoCode == obj.countryModel.isoCode
       );
       if (selectedCountry && selectedCountry.isoCode) {
-        $('.' + this.ConfigurationOption.selectorClass + ' .CountryDrpDwn')
+        $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn')
           .val(selectedCountry.isoCode)
           .trigger('change');
         $(
-          '.' + this.ConfigurationOption.selectorClass + ' .CountryNumberInput'
+          '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
         ).val(obj.rawNumber);
       }
     }
@@ -131,17 +137,17 @@ export class RlIntlPhoneComponent
    * Method to set the enable/disable state of the control using reactive form.
    */
   setDisabledState?(isDisabled: boolean): void {
-    if ($('.' + this.ConfigurationOption.selectorClass + ' .CountryDrpDwn')) {
-      $('.' + this.ConfigurationOption.selectorClass + ' .CountryDrpDwn').prop(
+    if ($('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn')) {
+      $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn').prop(
         'disabled',
         isDisabled
       );
     }
     if (
-      $('.' + this.ConfigurationOption.selectorClass + ' .CountryNumberInput')
+      $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput')
     ) {
       $(
-        '.' + this.ConfigurationOption.selectorClass + ' .CountryNumberInput'
+        '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
       ).prop('disabled', isDisabled);
     }
   }
@@ -359,7 +365,7 @@ export class RlIntlPhoneComponent
     );
     //#endregion
 
-    $('.' + this.ConfigurationOption.selectorClass + ' .CountryDrpDwn').select2(
+    $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn').select2(
       {
         data: selectedDrpDwnData,
         templateResult: this.prepareHtmlOptionToRender,
@@ -371,14 +377,14 @@ export class RlIntlPhoneComponent
       }
     );
     if (selectedCountry && selectedCountry.selected) {
-      $('.' + this.ConfigurationOption.selectorClass + ' .CountryDrpDwn')
+      $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn')
         .val(selectedCountry.id)
         .trigger('change');
     }
 
     if (NumberValue != null && NumberValue != undefined && NumberValue != '') {
       $(
-        '.' + this.ConfigurationOption.selectorClass + ' .CountryNumberInput'
+        '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
       ).val(NumberValue);
     }
   }
@@ -459,7 +465,7 @@ export class RlIntlPhoneComponent
       this.selectedCountry.inputMasking != ''
     ) {
       $(
-        '.' + this.ConfigurationOption.selectorClass + ' .CountryNumberInput'
+        '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
       ).inputmask(this.selectedCountry.inputMasking, {
         placeholder: '_',
         oncomplete: this.maskingOnCompleteEvent,
@@ -614,7 +620,7 @@ export class RlIntlPhoneComponent
    */
   emitOnNumberChange() {
     let inputValue: string = $(
-      '.' + this.ConfigurationOption.selectorClass + ' .CountryNumberInput'
+      '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
     ).val();
 
     this.outputResult = {
@@ -628,10 +634,10 @@ export class RlIntlPhoneComponent
     ) {
       let selectedCountryCode: string = this.selectedCountry.countryPhoneCode;
       this.outputResult.number = selectedCountryCode + inputValue;
-      this.outputResult.rawNumber = inputValue?.replace(/[^\w]/gi, '')??'';
+      this.outputResult.rawNumber = inputValue?.replace(/[^\w]/gi, '') ?? '';
     } else {
       this.outputResult.number = inputValue;
-      this.outputResult.rawNumber = inputValue?.replace(/[^\w]/gi, '')??'';
+      this.outputResult.rawNumber = inputValue?.replace(/[^\w]/gi, '') ?? '';
     }
     this.OnNumberChange.emit(this.outputResult);
     this.onChange(this.outputResult);
