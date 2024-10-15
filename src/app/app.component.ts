@@ -40,16 +40,12 @@ export class AppComponent {
   sampleForm: FormGroup;
   constructor(private formBuilder: FormBuilder) {
     this.sampleForm = this.formBuilder.group({
-      phone: [null],
+      phone: [],
       phone1: [null],
       formArray: this.formBuilder.array(
-        [].map(() => this.createParticipantInfoForm())
+        [].map(() => this.createChildForm())
       ),
     });
-
-    this.singleParticipants.push(
-      this.createParticipantInfoForm()
-    );
 
     this.selectedCountryList.push({
       isoCode: 'TE',
@@ -62,12 +58,12 @@ export class AppComponent {
     this.selectedCountryList.push({ isoCode: 'CA', name: 'CANADA' });
     this.configOption1 = new ConfigurationOptions();
     this.configOption2 = new ConfigurationOptions();
-    
+
     this.configOption3 = new ConfigurationOptions();
-    this.configOption3.selectorClass = "Phone1"
+    this.configOption3.selectorClass = 'Phone1';
 
     this.configOption4 = new ConfigurationOptions();
-    this.configOption4.selectorClass = "Phone2"
+    this.configOption4.selectorClass = 'Phone2';
 
     this.configOption2.selectorClass = 'CountryInput1';
     this.configOption2.optionTextTypes = [];
@@ -77,16 +73,11 @@ export class AppComponent {
     this.configOption1.selectorClass = 'CountryInput2';
     this.configOption1.isShowAllOtherCountry = false;
     this.configOption1.outputFormat = OutputOptionsEnum.Number;
-    // this.selectedCountryList.push(new CustomCountryModel(){ Name="Test2", ISOCode="IN"});
-    // setTimeout(() => {
-    //   this.GetFormValue();
-    // }, 100);
   }
 
-
-  createParticipantInfoForm(code?: string): FormGroup {
+  createChildForm(code?: string): FormGroup {
     return this.formBuilder.group({
-      phone: [null, [Validators.required]],
+      phoneNumber: [null, [Validators.required]],
     });
   }
   get singleParticipants(): FormArray {
@@ -126,13 +117,12 @@ export class AppComponent {
       number: '+1 (860) 260-5928',
       rawNumber: '8602605928',
     };
-    this.sampleForm.controls['phone'].setValue(
-      selectedCountryValue
-    );
+    this.sampleForm.controls['phone'].setValue(selectedCountryValue);
     console.log('form value is ', this.sampleForm);
   }
 
   onNumberChange(e: any) {
+    console.log(e);
     console.log('Number Value is', e);
   }
 
@@ -140,7 +130,6 @@ export class AppComponent {
     console.log('Number Value is', e);
   }
 
-  
   get controls() {
     return this.sampleForm.controls;
   }

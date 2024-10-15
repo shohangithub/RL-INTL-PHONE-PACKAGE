@@ -47,17 +47,17 @@ export class RlIntlPhoneComponent
   /**
    * Input property to set the Custom Country List.
    */
-  @Input() CountryList: CustomCountryModel[];
+  @Input() countryList: CustomCountryModel[];
 
   /**
    * Input property to provide the configuration of module and its feature.
    */
-  @Input() ConfigurationOption: ConfigurationOptions;
+  @Input() configurationOption: ConfigurationOptions;
 
   /**
    * Input property to set the prefilled number value.
    */
-  @Input() NumberTextValue: string;
+  @Input() numberTextValue: string;
   @Input() placeholder: string = '';
 
   /**
@@ -68,26 +68,26 @@ export class RlIntlPhoneComponent
   /**
    * Input property to set the selected country isocode not able to get correctly from number text value.
    */
-  @Input() SelectedCountryISOCode: string;
+  @Input() selectedCountryISOCode: string;
 
   /**
    * Output event : It is fire when Is Required flag is change.
    */
-  @Output() OnIsRequiredChange: EventEmitter<boolean> =
+  @Output() onIsRequiredChange: EventEmitter<boolean> =
     new EventEmitter<boolean>();
 
   /**
    * Output event : It is fire when Number is filled completly according to input masking.
    * return number or number with country code.
    */
-  @Output() OnNumberChange: EventEmitter<NumberResult> =
+  @Output() onNumberChange: EventEmitter<NumberResult> =
     new EventEmitter<NumberResult>();
 
   /**
    * Output event : It is fire when Number is filled completly according to input masking.
    * return number or number with country code.
    */
-  @Output() OnCountryDrpdwnChange: EventEmitter<ICountryModel> =
+  @Output() onCountryDrpdwnChange: EventEmitter<ICountryModel> =
     new EventEmitter<ICountryModel>();
   onChange: any = () => {};
   onTouched: any = () => {};
@@ -103,11 +103,11 @@ export class RlIntlPhoneComponent
         (x) => x.isoCode == obj.countryModel.isoCode
       );
       if (selectedCountry && selectedCountry.isoCode) {
-        $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn')
+        $('.' + this.configurationOption.selectorClass + this.key + ' .CountryDrpDwn')
           .val(selectedCountry.isoCode)
           .trigger('change');
         $(
-          '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
+          '.' + this.configurationOption.selectorClass + this.key + ' .CountryNumberInput'
         ).val(obj.rawNumber);
       }
     }
@@ -137,17 +137,17 @@ export class RlIntlPhoneComponent
    * Method to set the enable/disable state of the control using reactive form.
    */
   setDisabledState?(isDisabled: boolean): void {
-    if ($('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn')) {
-      $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn').prop(
+    if ($('.' + this.configurationOption.selectorClass + this.key + ' .CountryDrpDwn')) {
+      $('.' + this.configurationOption.selectorClass + this.key + ' .CountryDrpDwn').prop(
         'disabled',
         isDisabled
       );
     }
     if (
-      $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput')
+      $('.' + this.configurationOption.selectorClass + this.key + ' .CountryNumberInput')
     ) {
       $(
-        '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
+        '.' + this.configurationOption.selectorClass + this.key + ' .CountryNumberInput'
       ).prop('disabled', isDisabled);
     }
   }
@@ -164,10 +164,10 @@ export class RlIntlPhoneComponent
     this.allCountryList = this._service.GetCountryList();
     //assign the configuration option if found null so default dropdown will run.
     if (
-      this.ConfigurationOption == null ||
-      this.ConfigurationOption == undefined
+      this.configurationOption == null ||
+      this.configurationOption == undefined
     ) {
-      this.ConfigurationOption = new ConfigurationOptions();
+      this.configurationOption = new ConfigurationOptions();
     }
   }
 
@@ -179,9 +179,9 @@ export class RlIntlPhoneComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (
-      changes['NumberTextValue'] &&
-      changes['NumberTextValue'].previousValue !=
-        changes['NumberTextValue'].currentValue
+      changes['numberTextValue'] &&
+      changes['numberTextValue'].previousValue !=
+        changes['numberTextValue'].currentValue
     ) {
       this.initializeCountryDrpDwn();
     }
@@ -191,14 +191,15 @@ export class RlIntlPhoneComponent
    * Method to initialize the country Dropdown.
    */
   initializeCountryDrpDwn() {
+
     //#region Apply filter based on user given country list
     if (
-      this.CountryList != null &&
-      this.CountryList != undefined &&
-      this.CountryList.length > 0
+      this.countryList != null &&
+      this.countryList != undefined &&
+      this.countryList.length > 0
     ) {
       //check whether specify in configuration to show all other country or not.
-      if (this.ConfigurationOption.isShowAllOtherCountry) {
+      if (this.configurationOption.isShowAllOtherCountry) {
         this.filteredCountryList = [];
         this.filteredCountryList = this.filteredCountryList.concat(
           this.allCountryList
@@ -206,8 +207,8 @@ export class RlIntlPhoneComponent
       }
 
       //Loop through the user country list and add/change the value in filteredCountryList.
-      this.CountryList.forEach((customCountry) => {
-        debugger;
+      this.countryList.forEach((customCountry) => {
+
         let existingCountry = this.filteredCountryList.find(
           (x) => x.isoCode.toLowerCase() == customCountry.isoCode.toLowerCase()
         );
@@ -237,8 +238,9 @@ export class RlIntlPhoneComponent
     }
     //#endregion
 
+
     //#region Apply Sorting based on configuration.
-    switch (this.ConfigurationOption.sortBy) {
+    switch (this.configurationOption.sortBy) {
       case SortOrderEnum.CountryName:
         this.filteredCountryList = this.filteredCountryList.sort(
           (objA, objB) => {
@@ -269,25 +271,28 @@ export class RlIntlPhoneComponent
     }
     //#endregion
 
+
     //#region  set the selected country dropdown and set the input value.
     let selectedCountry: any;
     let NumberValue: any;
     if (
-      this.NumberTextValue != null &&
-      this.NumberTextValue != undefined &&
-      this.NumberTextValue != ''
+      this.numberTextValue != null &&
+      this.numberTextValue != undefined &&
+      this.numberTextValue != ''
     ) {
       //get the country code from number and set the selected country.
-      let countryCode = this.NumberTextValue.split(/ /)[0];
+      let countryCode = this.numberTextValue.split(/ /)[0];
       //replace the country code from numbertext.
-      NumberValue = this.NumberTextValue.replace(countryCode, '');
+      NumberValue = this.numberTextValue.replace(countryCode, '');
       NumberValue = NumberValue.trim();
+
+
 
       if (countryCode.includes('+')) {
         //check if country contain bracket then get country code till next space.
         if (NumberValue[0] == '(') {
           countryCode += ' ' + NumberValue.split(/ /)[0];
-          NumberValue = this.NumberTextValue.replace(countryCode, '');
+          NumberValue = this.numberTextValue.replace(countryCode, '');
         }
         //add the space in country code and trim the numbervalue.
         countryCode += ' ';
@@ -297,6 +302,8 @@ export class RlIntlPhoneComponent
         countryCode = '';
       }
 
+
+
       //set the countrycode from
       this.filteredCountryList = $.map(
         this.filteredCountryList,
@@ -305,14 +312,18 @@ export class RlIntlPhoneComponent
           return objCountry;
         }
       );
+
+
+
+
       if (
-        this.SelectedCountryISOCode != null &&
-        this.SelectedCountryISOCode != undefined &&
-        this.SelectedCountryISOCode != ''
+        this.selectedCountryISOCode != null &&
+        this.selectedCountryISOCode != undefined &&
+        this.selectedCountryISOCode != ''
       ) {
         //get the selected country dropdown match the inital 3 character with the countrycode from the filteredcountry list.
         selectedCountry = this.filteredCountryList.find(
-          (x) => x.isoCode == this.SelectedCountryISOCode
+          (x) => x.isoCode == this.selectedCountryISOCode
         );
         if (selectedCountry != null && selectedCountry != undefined) {
           selectedCountry.selected = true;
@@ -325,6 +336,22 @@ export class RlIntlPhoneComponent
         if (selectedCountry != null && selectedCountry != undefined) {
           selectedCountry.selected = true;
         }
+      }
+    }
+
+    //SET DEFAULT SELECTED COUNTRY CODE
+    if (
+      (this.numberTextValue == null || this.numberTextValue == undefined || this.numberTextValue == '') &&
+      this.selectedCountryISOCode != null &&
+      this.selectedCountryISOCode != undefined &&
+      this.selectedCountryISOCode != ''
+    ) {
+      //get the selected country dropdown match the inital 3 character with the countrycode from the filteredcountry list.
+      selectedCountry = this.filteredCountryList.find(
+        (x) => x.isoCode == this.selectedCountryISOCode
+      );
+      if (selectedCountry != null && selectedCountry != undefined) {
+        selectedCountry.selected = true;
       }
     }
 
@@ -342,8 +369,8 @@ export class RlIntlPhoneComponent
       }) => {
         obj.id = obj.isoCode;
         //set the tooltip, if flag is true and based of value which is set in the configuration.
-        if (this.ConfigurationOption.isShowToolTip) {
-          switch (this.ConfigurationOption.toolTipText) {
+        if (this.configurationOption.isShowToolTip) {
+          switch (this.configurationOption.toolTipText) {
             case TooltipOptionsEnum.CountryName:
               obj.title = obj.name;
               break;
@@ -365,11 +392,11 @@ export class RlIntlPhoneComponent
     );
     //#endregion
 
-    $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn').select2(
+    $('.' + this.configurationOption.selectorClass + this.key + ' .CountryDrpDwn').select2(
       {
         data: selectedDrpDwnData,
         templateResult: this.prepareHtmlOptionToRender,
-        minimumResultsForSearch: this.ConfigurationOption.isShowSearchOption
+        minimumResultsForSearch: this.configurationOption.isShowSearchOption
           ? 0
           : Infinity,
         matcher: this.searchCountryData,
@@ -377,14 +404,14 @@ export class RlIntlPhoneComponent
       }
     );
     if (selectedCountry && selectedCountry.selected) {
-      $('.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryDrpDwn')
+      $('.' + this.configurationOption.selectorClass + this.key + ' .CountryDrpDwn')
         .val(selectedCountry.id)
         .trigger('change');
     }
 
     if (NumberValue != null && NumberValue != undefined && NumberValue != '') {
       $(
-        '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
+        '.' + this.configurationOption.selectorClass + this.key + ' .CountryNumberInput'
       ).val(NumberValue);
     }
   }
@@ -397,7 +424,7 @@ export class RlIntlPhoneComponent
     let optionHtml = '';
     optionHtml += `<div class="CountryOptionItem">`;
     if (
-      this.ConfigurationOption.optionTextTypes.includes(ContentOptionsEnum.Flag)
+      this.configurationOption.optionTextTypes.includes(ContentOptionsEnum.Flag)
     ) {
       //check if customflag url is set then show the for that url
       if (
@@ -414,14 +441,14 @@ export class RlIntlPhoneComponent
       }
     }
     if (
-      this.ConfigurationOption.optionTextTypes.includes(
+      this.configurationOption.optionTextTypes.includes(
         ContentOptionsEnum.CountryName
       )
     ) {
       optionHtml += `<div class="CountryText">` + country.name + `</div>`;
     }
     if (
-      this.ConfigurationOption.optionTextTypes.includes(
+      this.configurationOption.optionTextTypes.includes(
         ContentOptionsEnum.CountryPhoneCode
       )
     ) {
@@ -465,7 +492,7 @@ export class RlIntlPhoneComponent
       this.selectedCountry.inputMasking != ''
     ) {
       $(
-        '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
+        '.' + this.configurationOption.selectorClass + this.key + ' .CountryNumberInput'
       ).inputmask(this.selectedCountry.inputMasking, {
         placeholder: '_',
         oncomplete: this.maskingOnCompleteEvent,
@@ -473,7 +500,7 @@ export class RlIntlPhoneComponent
         oncleared: this.maskingOnClearedEvent,
       });
       //emit the output event.
-      this.OnCountryDrpdwnChange.emit(this.selectedCountry);
+      this.onCountryDrpdwnChange.emit(this.selectedCountry);
     }
     return $(selectedHtml);
   };
@@ -604,7 +631,7 @@ export class RlIntlPhoneComponent
    * Emit is Input completed event to outer component.
    */
   emitIsRequiredEvent() {
-    this.OnIsRequiredChange.emit(this.IsInputComplete);
+    this.onIsRequiredChange.emit(this.IsInputComplete);
     if (this.IsInputComplete) {
       this.emitOnNumberChange();
     } else {
@@ -620,7 +647,7 @@ export class RlIntlPhoneComponent
    */
   emitOnNumberChange() {
     let inputValue: string = $(
-      '.' + this.ConfigurationOption.selectorClass + this.key + ' .CountryNumberInput'
+      '.' + this.configurationOption.selectorClass + this.key + ' .CountryNumberInput'
     ).val();
 
     this.outputResult = {
@@ -629,7 +656,7 @@ export class RlIntlPhoneComponent
       rawNumber: '',
     };
     if (
-      this.ConfigurationOption.outputFormat ==
+      this.configurationOption.outputFormat ==
       OutputOptionsEnum.NumberWithCountryCode
     ) {
       let selectedCountryCode: string = this.selectedCountry.countryPhoneCode;
@@ -639,7 +666,7 @@ export class RlIntlPhoneComponent
       this.outputResult.number = inputValue;
       this.outputResult.rawNumber = inputValue?.replace(/[^\w]/gi, '') ?? '';
     }
-    this.OnNumberChange.emit(this.outputResult);
+    this.onNumberChange.emit(this.outputResult);
     this.onChange(this.outputResult);
   }
 }

@@ -1,55 +1,49 @@
 <div>
   <h1>Sample with all country</h1>
   <rl-intl-phone
-    [NumberTextValue]="'8602605927'"
-    [SelectedCountryISOCode]="'US'"
-    [ConfigurationOption]="configOption2"
+    [numberTextValue]="'8602605927'"
+    [selectedCountryISOCode]="'US'"
+    [configurationOption]="configOption2"
   ></rl-intl-phone>
 </div>
 
 <div>
   <h1>Sample with selected country</h1>
   <rl-intl-phone
-    [CountryList]="selectedCountryList"
+    [countryList]="selectedCountryList"
     placeholder="Hello"
-    [ConfigurationOption]="configOption1"
-    (OnNumberChange)="onNumberChange($event)"
+    [configurationOption]="configOption1"
+    (onNumberChange)="onNumberChange($event)"
   ></rl-intl-phone>
 </div>
+-
 
 <form [formGroup]="sampleForm">
   <div>
     <h1>Sample with Reactive Form Support</h1>
     <rl-intl-phone
-      key="phone"
+      key="phone-number"
       formControlName="phone"
-      [ConfigurationOption]="configOption3"
-      (OnNumberChange)="onNumberChange($event)"
-    ></rl-intl-phone>
-    {{ controls["phone"].value | json }}
-    <rl-intl-phone
-      key="phone1"
-      formControlName="phone1"
-      [ConfigurationOption]="configOption4"
-      (OnNumberChange)="onNumberChange1($event)"
+      [selectedCountryISOCode]="'US'"
+      [configurationOption]="configOption3"
+      (onNumberChange)="onNumberChange($event)"
     ></rl-intl-phone>
   </div>
-  {{ controls["phone1"].value | json }}
   <button class="btn btn-primary" (click)="ToggbleEnableDisableState()">
     Toggle Enable/Disable
   </button>
   <button (click)="GetFormValue()">Get Value Using FormGroup</button>
 
   <ng-container *ngIf="singleParticipants.controls.length">
-    <!-- <div ngbAccordion [closeOthers]="true"> -->
-    @for (item of singleParticipants.controls;track item) {
-
+    @for (item of singleParticipants.controls;track $index) {
     <div>
       <h1>Sample with Reactive Form Array Support</h1>
       <rl-intl-phone
-        formControlName="phone1"
-        [ConfigurationOption]="configOption3"
-        (OnNumberChange)="onNumberChange1($event)"
+        [key]="'phone-' + $index"
+        formControlName="phoneNumber"
+        [selectedCountryISOCode]="'US'"
+        [configurationOption]="configOption3"
+        (onNumberChange)="onNumberChange($event)"
       ></rl-intl-phone>
     </div>
 
